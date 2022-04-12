@@ -438,6 +438,23 @@ run_background_tasks_on: background_worker
 You might also wish to investigate the `update_user_directory` and
 `media_instance_running_background_jobs` settings.
 
+#### Notifying Application Services
+
+You can designate one worker to send output traffic to Application Services.
+
+Specify its name in the shared configuration as follows:
+
+```yaml
+notify_appservices_from_worker: worker_name
+```
+
+This work cannot be load-balanced; please ensure the main process is restarted
+after setting this option in the shared configuration!
+
+This style of configuration supersedes the legacy `synapse.app.appservice`
+worker application type.
+
+
 ### `synapse.app.pusher`
 
 Handles sending push notifications to sygnal and email. Doesn't handle any
@@ -455,6 +472,9 @@ pusher_instances:
 
 
 ### `synapse.app.appservice`
+
+**Deprecated as of Synapse v1.58.** [Use `synapse.app.generic_worker` with the
+`notify_appservices_from_worker` option instead.](#notifying-application-services)
 
 Handles sending output traffic to Application Services. Doesn't handle any
 REST endpoints itself, but you should set `notify_appservices: False` in the
